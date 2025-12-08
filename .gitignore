@@ -1,0 +1,10 @@
+#Archivos sensibles
+.env
+#Dependencias
+node_modules/
+#Logs
+npm-debug.Log
+yarn-debug.Log
+yarn-error.Log
+#Sistema
+.DS_Store
