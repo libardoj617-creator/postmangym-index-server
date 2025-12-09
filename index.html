@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Servicio de Autenticación</title>
+  <title>Autenticación Gym</title>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -15,9 +16,10 @@
       align-items: center;
     }
 
-    h1 { /*estilos y altura del titulo*/
+    
+    h1 {
       margin-top: 40px;
-      margin-bottom: 1px; /* reduce espacio debajo del título */
+      margin-bottom: 1px;
       color: #ff8c00;
       font-size: 25px;
     }
@@ -35,36 +37,21 @@
       display: flex;
       justify-content: space-between;
       margin-bottom: 20px;
-      gap: 15px; /* separación entre botones */
-
-
+      gap: 15px;
     }
 
-    /* Botón Iniciar sesión */
-.button-group button.iniciar {
-  width: 48%;
-  padding: 10px;
-  background-color: #ff8c00; /* naranja */
-  color: white;
-  border: none;
-  border-radius: 14px;
-  cursor: pointer;
-}
+    .button-group button {
+      width: 48%;
+      padding: 10px;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+    }
 
-/* Botón Registrarse */
-.button-group button.registrarse {
-  width: 48%;
-  padding: 10px;
-  background-color: #ccc; /* gris */
-  color: #000;            /* texto negro */
-  border: none;
-  border-radius: 14px;
-  cursor: pointer;
-}
+    .iniciar { background-color: #ff8c00; color: white; }
+    .registrarse { background-color: #ccc; color: black; }
 
-
-        /*estilo de los inputs*/
-    .auth-container input {
+    input {
       width: 93%;
       padding: 10px;
       margin-bottom: 15px;
@@ -72,7 +59,7 @@
       border-radius: 14px;
     }
 
-    .auth-container button {
+    .action-btn {
       width: 100%;
       padding: 10px;
       background-color: #ff8c00;
@@ -80,6 +67,7 @@
       border: none;
       border-radius: 14px;
       cursor: pointer;
+      margin-top: 10px;
     }
 
     footer {
@@ -87,26 +75,92 @@
       font-size: 12px;
       color: #888;
     }
+
+    #mensaje {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
+
   <h1>Servicio de Autenticación</h1>
 
   <div class="auth-container">
+
     <div class="button-group">
-  <button class="iniciar">Iniciar sesión</button>
-  <button class="registrarse">Registrarse</button>
-</div>
+      <button class="iniciar" id="btnLogin">Iniciar sesión</button>
+      <button class="registrarse" id="btnRegister">Registrarse</button>
+    </div>
 
+    <input type="text" id="usuario" placeholder="Usuario" />
+    <input type="password" id="password" placeholder="Contraseña" />
 
-    
+    <button class="action-btn" id="btnEnviar">Ingresar</button>
 
-    <input type="text" placeholder="Usuario" />
-    <input type="password" placeholder="Contraseña" />
-    <button>Ingresar</button>
+    <p id="mensaje"></p>
   </div>
 
   <footer>© 2025 Created by Happy System</footer>
+
+
+  <script>
+    let modo = "login"; // por defecto
+
+    document.getElementById("btnLogin").addEventListener("click", () => {
+      modo = "login";
+      document.getElementById("btnEnviar").textContent = "Iniciar sesión";
+    });
+
+    document.getElementById("btnRegister").addEventListener("click", () => {
+      modo = "register";
+      document.getElementById("btnEnviar").textContent = "Registrarse";
+    });
+
+
+    document.getElementById("btnEnviar").addEventListener("click", async () => {
+      const usuario = document.getElementById("usuario").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const mensaje = document.getElementById("mensaje");
+
+      mensaje.textContent = "";
+
+      if (!usuario || !password) {
+        mensaje.textContent = "Debe llenar todos los campos";
+        mensaje.style.color = "red";
+        return;
+      }
+
+      const data = { usuario, password };
+
+      const url =
+        modo === "login"
+          ? "http://localhost:3000/api/login"
+          : "http://localhost:3000/api/register";
+
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (result.ok) {
+          mensaje.textContent = result.mensaje;
+          mensaje.style.color = "green";
+        } else {
+          mensaje.textContent = result.error;
+          mensaje.style.color = "red";
+        }
+      } catch (error) {
+        mensaje.textContent = "Error comunicando con el servidor";
+        mensaje.style.color = "red";
+      }
+    });
+  </script>
+
 </body>
 </html>
-
