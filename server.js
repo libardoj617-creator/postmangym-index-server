@@ -32,18 +32,18 @@ const pool = mysql.createPool({
 
 // ---------------------- REGISTRO ----------------------
 app.post('/api/register', (req, res) => {
-  const { usuario, password } = req.body;
+  const { usuario, password } = req.body; //Recibe parametros
 
-  if (!usuario || !password) {
+  if (!usuario || !password) {  //Verifica si han ingresado datos
     return res.status(400).json({
       ok: false,
       error: "Status 400 Usuario y contraseña obligatorios",
     });
   }
 
-  const hash = bcrypt.hashSync(password, 10);
+  const hash = bcrypt.hashSync(password, 10); // Encrypta la clave
 
-  pool.query(
+  pool.query(   //Se encarga de ingresar datos del usuario al SQL
     "INSERT INTO datosclientes3 (usuario, password) VALUES (?, ?)",
     [usuario, hash],
     (err, result) => {
@@ -100,7 +100,7 @@ app.post('/api/login', (req, res) => {
       if (!validPassword) {
         return res.status(401).json({
           ok: false,
-          error: "Status 401 Credenciales inválidas",
+          error: "Status 401 Clave incorrecta",
         });
       }
 
