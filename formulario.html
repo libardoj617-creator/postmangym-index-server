@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Formulario</title>
+
+<!-- Estilos -->
+<link rel="stylesheet" href="header.css" />
+<link rel="stylesheet" href="formulario.css" />
+</head>
+
+<body>
+
+<!-- CONTENEDOR DEL HEADER -->
+<div id="header-container"></div>
+
+
+
+<h1>Servicio de Autenticación</h1>
+<!--Caja blanca-->
+<div class="auth-container">
+<!-- ESTADO DEL SERVIDOR ARRIBA DEL FORMULARIO -->
+<div id="status" class="status-box"></div>
+
+
+
+    <div class="button-group">
+        <button class="active-btn" id="btnLogin">Iniciar sesión</button>
+        <button class="inactive-btn" id="btnRegister">Registrarse</button>
+    </div>
+
+    <input type="text" id="usuario" placeholder="Usuario" />
+    <input type="password" id="password" placeholder="Contraseña" />
+
+    <button class="action-btn" id="btnEnviar">Ingresar</button>
+
+    <!-- NUEVOS BOTONES -->
+    <button class="action-btn" id="btnBorrar">Borrar Cliente</button>
+    <button class="action-btn" id="btnLista">Lista de Clientes</button>
+
+    <p id="mensaje"></p>
+</div>
+
+<!---se crea una clase footer para controlar estilos desde css-->
+<footer class="footer">© 2025 Created by Happy System</footer>
+
+<!-- CARGAR HEADER -->
+<script>
+fetch("header.html")
+  .then(res => res.text())
+  .then(html => {
+      document.getElementById("header-container").innerHTML = html;
+  })
+  .catch(err => console.log("Error cargando header:", err));
+</script>
+
+<!-- ESTADO DEL BACKEND -->
+<script>
+async function checkBackend() {
+  try {
+    const res = await fetch("http://localhost:3000/api/health");
+    const box = document.getElementById("status");
+
+    if (res.ok) {
+      box.textContent = "Servidor conectado ✅";
+      box.style.color = "#28a745";
+    } else {
+      box.textContent = "Servidor sin conexión";
+      box.style.color = "#888";
+    }
+  } catch (error) {
+    const box = document.getElementById("status");
+    box.textContent = "Servidor sin conexión";
+    box.style.color = "#888";
+  }
+}
+
+checkBackend();
+setInterval(checkBackend, 5000);
+</script>
+
+<!-- TU LÓGICA -->
+<script src="formulario.js"></script>
+
+<!-- ESTILOS DEL STATUS -->
+<style>
+
+</style>
+
+</body>
+</html>

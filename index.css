@@ -1,0 +1,21 @@
+body {
+font-family: Arial;
+background: #fdf6f0;
+text-align: center;
+padding: 40px;
+}
+
+
+h1 {
+color: #ff8c00;
+}
+
+
+a {
+font-size: 18px;
+color: #ff8c00;
+text-decoration: none;
+font-weight: bold;
+}
+
+

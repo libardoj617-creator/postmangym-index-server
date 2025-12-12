@@ -8,7 +8,7 @@
 
 .header-container {
   background: #ff8c00;
-  padding: 2%;
+  padding: 1%;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -19,19 +19,20 @@
 /* ============================
    LOGO + TÍTULOS
 ============================ */
-.header-top {
+.header-top { /* Logo GYM*/
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
+  margin-bottom: 1px;
 }
 
 .header-logo {  /*borde del logo*/
-  width: 27%;
+  width: 25%;
   height: auto;
   border-radius: 12px;
   background: #fff;
-  padding: 1%;
+  margin-bottom: 1px;
 }
 
 .header-title {
@@ -40,14 +41,16 @@
   color: #222;
   font-family: 'Poppins', sans-serif;
   margin-bottom: 0;
+  
 }
 
-.subtitle {
+.subtitle {   /*Subtitulo by Happy System*/
   font-size: 10px;
   font-weight: 600;
   color: #625f5f;
   opacity: 0.9;
   font-family: 'Poppins', sans-serif;
+  margin-top: 1%;
 }
 
 
@@ -80,7 +83,7 @@
 
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px;
 }
 
 .header-nav li {
@@ -96,7 +99,7 @@
 .header-nav a {
   background: #ff8c00;
   color: #fff;
-  padding: 8px 2px;
+  padding: 10% 2px;
 
   width: 160px;
   text-align: center;        /* Centra el texto */
@@ -106,7 +109,7 @@
   
   border-radius: 14px;
   text-decoration: none;
-  font-size: 10px;
+  font-size: 1%;
   font-weight: 600;
   font-family: 'Poppins', sans-serif;
 
@@ -120,7 +123,7 @@
 
 /* Hover */
 .header-nav a:hover {
-  background: #c96c00;
+  background: #ff8c00;
   transform: translateY(-3px);
   box-shadow: 0 8px 14px rgba(0,0,0,0.18);
 }

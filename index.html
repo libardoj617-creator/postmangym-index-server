@@ -1,317 +1,34 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Autenticación Gym</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inicio</title>
 
-  <!-- Tu CSS del Header -->
-  <link rel="stylesheet" href="header.css">
+    <!-- Estilos generales -->
+    <link rel="stylesheet" href="index.css" />
 
-  <style>
-    body {      
-      font-family: Arial, sans-serif;
-      background-color: #fdf6f0;
-      margin: 0;
-      padding: 0;
-      
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-    }
-
-    h1 { /* titulo servicio de autenticacion*/
-      margin-top: 30px;
-      margin-bottom: 1px;
-      color: #ff8c00;
-      font-size: 25px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .auth-container {
-      background-color: #fff;
-      padding: 30px;
-      padding-top: 0;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      width: 300px;
-      margin-left: auto;
-      margin-right: auto;
-      margin-top: 5px;
-    }
-
-    .button-group {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 20px;
-      gap: 15px;
-    }
-
-    /* Estado general de botones */
-    .button-group button {
-      width: 48%;
-      padding: 10px;
-      border: none;
-      border-radius: 14px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.25s;
-    }
-
-    /* Botón activo */
-    .active-btn {
-      background-color: #ff8c00 !important;
-      color: white !important;
-      transform: scale(1.05);
-    }
-
-    /* Botón inactivo */
-    .inactive-btn {
-      background-color: #ccc !important;
-      color: black !important;
-    }
-
-    input {
-      width: 93%;
-      padding: 10px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 14px;
-    }
-
-    .action-btn {
-      width: 100%;
-      padding: 10px;
-      background-color: #ff8c00;
-      color: white;
-      border: none;
-      border-radius: 14px;
-      cursor: pointer;
-      margin-top: 10px;
-      font-weight: bold;
-    }
-
-    footer {
-      margin-top: 40px;
-      font-size: 12px;
-      color: #888;
-    }
-
-    #mensaje {
-      margin-top: 10px;
-      text-align: center;
-      font-size: 14px;
-    }
-
-       /* ============================
-       RESPONSIVE SOLO PARA FORMULARIO
-       ============================ */
-       @media (max-width: 768px) {
-       .auth-container {
-        width: 40%;           /* más ancho en pantallas pequeñas */
-        padding: 20px;
-      }
-      .button-group {
-        flex-direction: column; /* botones uno debajo del otro */
-        gap: 10px;
-      }
-      .button-group button {
-        width: 100%;          /* botones ocupan todo el ancho */
-      }
-      input {
-        width: 95%;          /* inputs más cómodos */
-      }
-    }
-
-    @media (max-width: 480px) {
-      h1 {
-        font-size: 20px;      /* título más pequeño */
-      }
-      .auth-container {
-        padding: 15px;
-      }
-      .action-btn {
-        font-size: 14px;
-        padding: 8px;
-      }
-      input {
-        font-size: 14px;
-        padding: 8px;
-      }
-    }
-
-
-  </style>
-
+    <!-- Estilos del Header -->
+    <link rel="stylesheet" href="header.css" />
 </head>
-
-
 <body>
 
-  <div id="header-placeholder"></div>
+    <!-- Insertar el Header aquí -->
+    <div id="header-container"></div>
 
-  <script>
-    fetch("header.html")
-        .then(res => res.text())
-        .then(html => {
-            document.getElementById("header-placeholder").innerHTML = html;
-        });
-
-
-        
-  </script>
-
-  <h1>Servicio de Autenticación</h1>
-
-  <div class="auth-container">
-
+    <h1>Bienvenido</h1>
+    <a href="formulario.html">Ir al formulario</a>
     
 
-
-
-
-    <p id="status">Servidor activo</p>
-   
-
-
-
-    <div class="button-group">
-      <button class="active-btn" id="btnLogin">Iniciar sesión</button>
-      <button class="inactive-btn" id="btnRegister">Registrarse</button>
-    </div>
-
-    <input type="text" id="usuario" placeholder="Usuario" />
-    <input type="password" id="password" placeholder="Contraseña" />
-
-    <button class="action-btn" id="btnEnviar">Ingresar</button>
-
-    <p id="mensaje"></p>
-   </div>
-
-   <footer>© 2025 Created by Happy System</footer>
-
-
+    <!-- Script para cargar Header.html dinámicamente -->
     <script>
+        fetch("Header.html")
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById("header-container").innerHTML = html;
+            })
+            .catch(err => console.log("Error al cargar Header:", err));
+    </script>
 
-
-
-
-     let modo = "login"; // por defecto
-
-     const btnLogin = document.getElementById("btnLogin");
-     const btnRegister = document.getElementById("btnRegister");
-
-     // Cambiar estilos al seleccionar LOGIN
-     btnLogin.addEventListener("click", () => {
-      modo = "login";
-
-      btnLogin.classList.add("active-btn");
-      btnLogin.classList.remove("inactive-btn");
-
-      btnRegister.classList.add("inactive-btn");
-      btnRegister.classList.remove("active-btn");
-
-      document.getElementById("btnEnviar").textContent = "Iniciar sesión";
-      });
-
-      // Cambiar estilos al seleccionar REGISTRO
-      btnRegister.addEventListener("click", () => {
-      modo = "register";
-
-      btnRegister.classList.add("active-btn");
-      btnRegister.classList.remove("inactive-btn");
-
-      btnLogin.classList.add("inactive-btn");
-      btnLogin.classList.remove("active-btn");
-
-      document.getElementById("btnEnviar").textContent = "Registrarse";
-      });
-
-
-      // Enviar datos al server.js
-      document.getElementById("btnEnviar").addEventListener("click", async () => {
-      const usuario = document.getElementById("usuario").value.trim();
-      const password = document.getElementById("password").value.trim();
-      const mensaje = document.getElementById("mensaje");
-
-      mensaje.textContent = "";
-
-      if (!usuario || !password) {
-        mensaje.textContent = "Debe llenar todos los campos";
-        mensaje.style.color = "red";
-        return;
-      }
-
-      const data = { usuario, password };
-
-      const url =
-        modo === "login"
-          ? "http://localhost:3000/api/login"
-          : "http://localhost:3000/api/register";
-
-      try {
-        const response = await fetch(url, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data)
-        });
-
-        const result = await response.json();
-
-        if (result.ok) {
-          mensaje.textContent = result.mensaje;
-          mensaje.style.color = "green";
-        } else {
-          mensaje.textContent = result.error;
-          mensaje.style.color = "red";
-        }
-      } catch (error) {
-        mensaje.textContent = "Error al comunicar con el servidor";
-        mensaje.style.color = "red";
-      }
-      });
-     </script>
-
-     <div id="status">
-     <script>
-  // Verificar estado del servidor
-  async function checkBackend() {
-    try {
-      const res = await fetch("http://localhost:3000/api/health");
-      const statusDiv = document.getElementById("status");
-
-      if (res.ok) { //======SERVIDOR-CONECTADO========
-        statusDiv.textContent = "Servidor conectado ✅";
-        statusDiv.style.color = "#91c996";
-      } else {
-        statusDiv.textContent = "Servidor sin conexión";
-        statusDiv.style.color = "#666363";
-
-      }
-    } catch (error) {
-      const statusDiv = document.getElementById("status");
-      statusDiv.textContent = "Servidor sin conexión";
-      statusDiv.style.color = "#666363";
-    }
-  }
-
-  checkBackend();
-  setInterval(checkBackend, 5000);
-</script>
-<style>
-  #status {
-    text-align: center;
-    font-weight: bold;
-    margin: 0;      /* sin margen externo */
-    padding: 2px;   /* espacio interno pequeño */
-    padding-top: 0px;   /* espacio interno pequeño */
-  }
-</style>
-
-
-     </div>
-
-
-  </body>
+</body>
 </html>
