@@ -14,13 +14,14 @@
       background-color: #fdf6f0;
       margin: 0;
       padding: 0;
+      
       display: flex;
       flex-direction: column;
       align-items: stretch;
     }
 
-    h1 {
-      margin-top: 40px;
+    h1 { /* titulo servicio de autenticacion*/
+      margin-top: 30px;
       margin-bottom: 1px;
       color: #ff8c00;
       font-size: 25px;
@@ -31,11 +32,13 @@
     .auth-container {
       background-color: #fff;
       padding: 30px;
+      padding-top: 0;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
       width: 300px;
       margin-left: auto;
       margin-right: auto;
+      margin-top: 5px;
     }
 
     .button-group {
@@ -101,11 +104,11 @@
       font-size: 14px;
     }
 
-/* ============================
+       /* ============================
        RESPONSIVE SOLO PARA FORMULARIO
-    ============================ */
-    @media (max-width: 768px) {
-      .auth-container {
+       ============================ */
+       @media (max-width: 768px) {
+       .auth-container {
         width: 40%;           /* más ancho en pantallas pequeñas */
         padding: 20px;
       }
@@ -154,11 +157,24 @@
         .then(html => {
             document.getElementById("header-placeholder").innerHTML = html;
         });
+
+
+        
   </script>
 
   <h1>Servicio de Autenticación</h1>
 
   <div class="auth-container">
+
+    
+
+
+
+
+    <p id="status">Servidor activo</p>
+   
+
+
 
     <div class="button-group">
       <button class="active-btn" id="btnLogin">Iniciar sesión</button>
@@ -171,19 +187,23 @@
     <button class="action-btn" id="btnEnviar">Ingresar</button>
 
     <p id="mensaje"></p>
-  </div>
+   </div>
 
-  <footer>© 2025 Created by Happy System</footer>
+   <footer>© 2025 Created by Happy System</footer>
 
 
-  <script>
-    let modo = "login"; // por defecto
+    <script>
 
-    const btnLogin = document.getElementById("btnLogin");
-    const btnRegister = document.getElementById("btnRegister");
 
-    // Cambiar estilos al seleccionar LOGIN
-    btnLogin.addEventListener("click", () => {
+
+
+     let modo = "login"; // por defecto
+
+     const btnLogin = document.getElementById("btnLogin");
+     const btnRegister = document.getElementById("btnRegister");
+
+     // Cambiar estilos al seleccionar LOGIN
+     btnLogin.addEventListener("click", () => {
       modo = "login";
 
       btnLogin.classList.add("active-btn");
@@ -193,10 +213,10 @@
       btnRegister.classList.remove("active-btn");
 
       document.getElementById("btnEnviar").textContent = "Iniciar sesión";
-    });
+      });
 
-    // Cambiar estilos al seleccionar REGISTRO
-    btnRegister.addEventListener("click", () => {
+      // Cambiar estilos al seleccionar REGISTRO
+      btnRegister.addEventListener("click", () => {
       modo = "register";
 
       btnRegister.classList.add("active-btn");
@@ -206,11 +226,11 @@
       btnLogin.classList.remove("active-btn");
 
       document.getElementById("btnEnviar").textContent = "Registrarse";
-    });
+      });
 
 
-    // Enviar datos al server.js
-    document.getElementById("btnEnviar").addEventListener("click", async () => {
+      // Enviar datos al server.js
+      document.getElementById("btnEnviar").addEventListener("click", async () => {
       const usuario = document.getElementById("usuario").value.trim();
       const password = document.getElementById("password").value.trim();
       const mensaje = document.getElementById("mensaje");
@@ -250,9 +270,48 @@
         mensaje.textContent = "Error al comunicar con el servidor";
         mensaje.style.color = "red";
       }
-    });
+      });
+     </script>
 
-  </script>
+     <div id="status">
+     <script>
+  // Verificar estado del servidor
+  async function checkBackend() {
+    try {
+      const res = await fetch("http://localhost:3000/api/health");
+      const statusDiv = document.getElementById("status");
 
-</body>
+      if (res.ok) { //======SERVIDOR-CONECTADO========
+        statusDiv.textContent = "Servidor conectado ✅";
+        statusDiv.style.color = "#91c996";
+      } else {
+        statusDiv.textContent = "Servidor sin conexión";
+        statusDiv.style.color = "#666363";
+
+      }
+    } catch (error) {
+      const statusDiv = document.getElementById("status");
+      statusDiv.textContent = "Servidor sin conexión";
+      statusDiv.style.color = "#666363";
+    }
+  }
+
+  checkBackend();
+  setInterval(checkBackend, 5000);
+</script>
+<style>
+  #status {
+    text-align: center;
+    font-weight: bold;
+    margin: 0;      /* sin margen externo */
+    padding: 2px;   /* espacio interno pequeño */
+    padding-top: 0px;   /* espacio interno pequeño */
+  }
+</style>
+
+
+     </div>
+
+
+  </body>
 </html>

@@ -8,7 +8,7 @@
 
 .header-container {
   background: #ff8c00;
-  padding: 18px;
+  padding: 2%;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -27,11 +27,11 @@
 }
 
 .header-logo {  /*borde del logo*/
-  width: 150px;
+  width: 27%;
   height: auto;
   border-radius: 12px;
   background: #fff;
-  padding: 1px;
+  padding: 1%;
 }
 
 .header-title {
@@ -39,13 +39,13 @@
   font-weight: 700;
   color: #222;
   font-family: 'Poppins', sans-serif;
-  margin: 0;
+  margin-bottom: 0;
 }
 
 .subtitle {
-  font-size: 18px;
+  font-size: 10px;
   font-weight: 600;
-  color: #222;
+  color: #625f5f;
   opacity: 0.9;
   font-family: 'Poppins', sans-serif;
 }
@@ -58,8 +58,8 @@
   background: #fff;
   border-radius: 20px;
   
-  padding: 10px;
-  width: 90%;
+  padding: 1%;
+  width: 30%;
   max-width: 350px;
   box-shadow: 0 8px 16px rgba(0,0,0,0.15);
   display: flex;
@@ -137,11 +137,11 @@
 
 
 /* Tablets grandes (≤ 1024px) */
-@media (max-width: 1840px) {
+@media (max-width: 2024px) {
   .header-nav a {
     width: 150px;
     font-size: 15px;
-    padding: 6px 12px;
+    padding: 2% 8%;
   }
 }
 

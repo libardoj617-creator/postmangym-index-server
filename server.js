@@ -30,11 +30,6 @@ const pool = mysql.createPool({
   queueLimit: 0,
 });
 
-// ------------------ PRUEBA DE SERVIDOR ---------------
-app.get('/ping', (req, res) => {
-  res.json({ ok: true, mensaje: "Servidor funcionando" });
-});
-
 // ---------------------- REGISTRO ----------------------
 app.post('/api/register', (req, res) => {
   const { usuario, password } = req.body;
@@ -42,7 +37,7 @@ app.post('/api/register', (req, res) => {
   if (!usuario || !password) {
     return res.status(400).json({
       ok: false,
-      error: "Usuario y contraseña obligatorios",
+      error: "Status 400 Usuario y contraseña obligatorios",
     });
   }
 
@@ -56,13 +51,13 @@ app.post('/api/register', (req, res) => {
         console.error("Error al registrar:", err);
         return res.status(500).json({
           ok: false,
-          error: "Error interno del servidor",
+          error: "Status 500 Error interno del servidor",
         });
       }
 
       return res.status(201).json({
         ok: true,
-        mensaje: "Usuario registrado correctamente",
+        mensaje: "Status 201 Usuario registrado correctamente",
       });
     }
   );
@@ -75,7 +70,7 @@ app.post('/api/login', (req, res) => {
   if (!usuario || !password) {
     return res.status(400).json({
       ok: false,
-      error: "Usuario y contraseña obligatorios",
+      error: "Status 400 Usuario y contraseña obligatorios",
     });
   }
 
@@ -87,14 +82,14 @@ app.post('/api/login', (req, res) => {
         console.error("Error al consultar BD:", err);
         return res.status(500).json({
           ok: false,
-          error: "Error interno del servidor",
+          error: "Status 500 interno del servidor",
         });
       }
 
       if (results.length === 0) {
         return res.status(404).json({
           ok: false,
-          error: "Usuario no encontrado",
+          error: "Status 404 Usuario no encontrado",
         });
       }
 
@@ -105,17 +100,81 @@ app.post('/api/login', (req, res) => {
       if (!validPassword) {
         return res.status(401).json({
           ok: false,
-          error: "Credenciales inválidas",
+          error: "Status 401 Credenciales inválidas",
         });
       }
 
       return res.status(200).json({
         ok: true,
-        mensaje: "Login exitoso",
+        mensaje: "Status 200 Login exitoso",
       });
     }
   );
 });
+
+// ------------------------ LISTADO CLIENTES ------------------------
+app.get('/api/listaclientes', (req, res) => {
+  pool.query("SELECT * FROM datosclientes3", (err, results) => {
+    if (err) {
+      console.error("Error al consultar BD:", err);
+      return res.status(500).json({
+        ok: false,
+        error: "Status 500 interno del servidor",
+      });
+    }
+
+    return res.status(200).json({
+      ok: true,
+      clientes: results, // devuelve el listado completo
+    });
+  });
+});
+
+// ------------------------ BORRAR USUARIO ------------------------
+app.delete('/api/borrarcliente/:usuario', (req, res) => {
+  const { usuario } = req.params;
+
+  if (!usuario) {
+    return res.status(400).json({
+      ok: false,
+      error: "Status 400 Nombre de usuario obligatorio",
+    });
+  }
+
+  pool.query(
+    "DELETE FROM datosclientes3 WHERE usuario = ?",
+    [usuario],
+    (err, result) => {
+      if (err) {
+        console.error("Error al eliminar usuario:", err);
+        return res.status(500).json({
+          ok: false,
+          error: "Status 500 interno del servidor",
+        });
+      }
+
+      if (result.affectedRows === 0) {
+        return res.status(404).json({
+          ok: false,
+          error: "Status 404 Usuario no encontrado",
+        });
+      }
+
+      return res.status(200).json({
+        ok: true,
+        mensaje: `Status 200 Usuario '${usuario}' eliminado exitosamente`,
+      });
+    }
+  );
+});
+
+
+// Endpoint de health check, permite saber si el servidor esta conectado//
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'ok', message: 'Backend corriendo' });
+});
+
+
 
 // ----------------- SERVIDOR ENCENDIDO -----------------
 app.listen(PORT, () => {
