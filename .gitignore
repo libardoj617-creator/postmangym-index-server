@@ -1,5 +1,4 @@
-#Archivos sensibles
-.env
+#Archivos sencibles
 #Dependencias
 node_modules/
 #Logs
