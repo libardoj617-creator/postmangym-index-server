@@ -32,7 +32,7 @@ const pool = mysql.createPool({
 
 // ---------------------- REGISTRO ----------------------
 app.post('/api/register', (req, res) => {
-  const { usuario, password } = req.body; //Recibe parametros
+  const { usuario, password, rol = 'cliente', tiempo_restante = 0 } = req.body; //Recibe parametros
 
   if (!usuario || !password) {  //Verifica si han ingresado datos
     return res.status(400).json({
@@ -42,10 +42,12 @@ app.post('/api/register', (req, res) => {
   }
 
   const hash = bcrypt.hashSync(password, 5); // Encrypta la clave
+  const tiempoRestante = Number.isFinite(Number(tiempo_restante)) ? Number(tiempo_restante) : 0;
+  const membresia = tiempoRestante > 0 ? 'Activa' : 'Inactiva';
 
   pool.query(   //Se encarga de ingresar datos del usuario al SQL
-    "INSERT INTO usuarios (nombre, password) VALUES (?, ?)",
-    [usuario, hash],
+    "INSERT INTO usuarios (nombre, password, rol, membresia, tiempo_restante) VALUES (?, ?, ?, ?, ?)",
+    [usuario, hash, rol, membresia, tiempoRestante],
     (err, result) => {
       if (err) {
         console.error("Error al registrar:", err);
@@ -107,6 +109,12 @@ app.post('/api/login', (req, res) => {
       return res.status(200).json({
         ok: true,
         mensaje: "Status 200 Login exitoso",
+        usuario: {
+          nombre: user.nombre,
+          rol: user.rol,
+          membresia: user.membresia,
+          tiempo_restante: user.tiempo_restante,
+        },
       });
     }
   );
@@ -168,6 +176,61 @@ app.delete('/api/borrarcliente/:usuario', (req, res) => {
   );
 });
 
+
+// ------------------------ ACTIVAR MEMBRESÍA ------------------------
+const handleActivarMembresia = (req, res) => {
+  const { usuario, tiempo_restante } = req.body;
+
+  if (!usuario || typeof tiempo_restante === 'undefined') {
+    return res.status(400).json({
+      ok: false,
+      error: 'Status 400 Usuario y tiempo_restante obligatorios',
+    });
+  }
+
+  let dias = Number(tiempo_restante);
+  if (!Number.isFinite(dias)) {
+    return res.status(400).json({
+      ok: false,
+      error: 'Status 400 tiempo_restante debe ser un número válido',
+    });
+  }
+
+  if (dias < 0) {
+    dias = 0;
+  }
+
+  const membresia = dias > 0 ? 'Activa' : 'Inactiva';
+
+  pool.query(
+    'UPDATE usuarios SET tiempo_restante = ?, membresia = ? WHERE nombre = ?',
+    [dias, membresia, usuario],
+    (err, result) => {
+      if (err) {
+        console.error('Error al actualizar membresía:', err);
+        return res.status(500).json({
+          ok: false,
+          error: 'Status 500 interno del servidor',
+        });
+      }
+
+      if (result.affectedRows === 0) {
+        return res.status(404).json({
+          ok: false,
+          error: 'Status 404 Usuario no encontrado',
+        });
+      }
+
+      return res.status(200).json({
+        ok: true,
+        mensaje: `Status 200 Membresía actualizada para ${usuario}`,
+      });
+    }
+  );
+};
+
+app.put('/api/activarmembresia', handleActivarMembresia);
+app.post('/api/activarmembresia', handleActivarMembresia);
 
 // Endpoint de health check, permite saber si el servidor esta conectado//
 app.get('/api/health', (req, res) => {

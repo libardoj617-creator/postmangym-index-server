@@ -1,173 +1,134 @@
+﻿import { initListaClientes } from "./lista-de-clientes.js";
+import { initActivarMembresia } from "./activar-membresia.js";
+import {
+  createShowMessage,
+  toggleAdminFieldsFactory,
+  toggleAdminControlsFactory,
+  toggleUserInfoFactory
+} from "./ui-helpers.js";
+import { initAuthEvents } from "./auth.js";
+import { initBorrarCliente, initCerrarSesion } from "./admin.js";
+
 document.addEventListener("DOMContentLoaded", () => {
   // Elementos
   const btnLogin = document.getElementById("btnLogin");
   const btnRegister = document.getElementById("btnRegister");
   const btnEnviar = document.getElementById("btnEnviar");
+  const btnLogout = document.getElementById("btnLogout");
   const btnBorrar = document.getElementById("btnBorrar");
   const btnLista = document.getElementById("btnLista");
+  const btnActivarMembresia = document.getElementById("btnActivarMembresia");
+  const btnConfirmarActivar = document.getElementById("btnConfirmarActivar");
+  const activarPanel = document.getElementById("activar-membresia-panel");
+  const activarUsuario = document.getElementById("activar-usuario");
+  const activarDias = document.getElementById("activar-dias");
+  const btnPago = document.getElementById("btnPago");
   const mensaje = document.getElementById("mensaje");
+  const clientesListado = document.getElementById("clientes-listado");
+  const userTitle = document.getElementById("user-title");
+  const clientInfo = document.getElementById("client-info");
+  const membershipLabel = document.getElementById("membership-label");
+  const tiempoLabel = document.getElementById("tiempo-label");
+  const statusMembershipLabel = document.getElementById("status-membership-label");
+  const adminFields = document.getElementById("admin-fields");
+  const membresiaSelect = document.getElementById("membresia");
 
-  let modo = "login"; // por defecto
+  let modo = "login";
+  let userRole = null;
+  let currentUser = null;
 
-  // Validación helper
-  const showMessage = (text, color = "black") => {
-    if (!mensaje) return;
-    mensaje.style.whiteSpace = "pre-wrap"; // para mostrar saltos de línea
-    mensaje.textContent = text;
-    mensaje.style.color = color;
-  };
+  // Crear funciones de UI
+  const showMessage = createShowMessage(mensaje);
+  const toggleAdminFields = toggleAdminFieldsFactory(adminFields);
+  const toggleAdminControls = toggleAdminControlsFactory({
+    btnRegister,
+    btnBorrar,
+    btnLista,
+    btnActivarMembresia,
+    btnLogout,
+    activarPanel,
+    clientesListado
+  });
+  const toggleUserInfo = toggleUserInfoFactory({
+    userTitle,
+    clientInfo,
+    membershipLabel,
+    tiempoLabel,
+    statusMembershipLabel
+  });
 
-  // Cambiar a LOGIN
-  if (btnLogin) {
-    btnLogin.addEventListener("click", () => {
-      modo = "login";
+  const resetToLogin = () => {
+    modo = "login";
+    userRole = null;
+    currentUser = null;
+    if (btnLogin) {
       btnLogin.classList.add("active-btn");
       btnLogin.classList.remove("inactive-btn");
+    }
+    if (btnRegister) {
       btnRegister.classList.add("inactive-btn");
       btnRegister.classList.remove("active-btn");
-      if (btnEnviar) btnEnviar.textContent = "Iniciar sesión";
-    });
-  }
+    }
+    if (btnEnviar) btnEnviar.textContent = "Ingresar";
+    if (clientesListado) {
+      clientesListado.style.display = "none";
+      clientesListado.innerHTML = "";
+    }
+    if (activarPanel) {
+      activarPanel.style.display = "none";
+    }
+    toggleAdminControls(userRole, modo);
+    toggleAdminFields(userRole, modo);
+    toggleUserInfo(userRole, currentUser);
+  };
 
-  // Cambiar a REGISTRO
-  if (btnRegister) {
-    btnRegister.addEventListener("click", () => {
-      modo = "register";
-      btnRegister.classList.add("active-btn");
-      btnRegister.classList.remove("inactive-btn");
-      btnLogin.classList.add("inactive-btn");
-      btnLogin.classList.remove("active-btn");
-      if (btnEnviar) btnEnviar.textContent = "Registrarse";
-    });
-  }
+  // Inicializar visibilidad
+  toggleAdminControls(userRole, modo);
+  toggleAdminFields(userRole, modo);
+  toggleUserInfo(userRole, currentUser);
 
-  // Enviar datos Login/Registro
-  if (btnEnviar) {
-    btnEnviar.addEventListener("click", async () => {
-      const usuarioInput = document.getElementById("usuario");
-      const passwordInput = document.getElementById("password");
+  // Inicializar autenticación
+  const authHandler = initAuthEvents({
+    btnLogin,
+    btnRegister,
+    btnEnviar,
+    membresiaSelect,
+    showMessage,
+    onModoChange: (newModo) => {
+      modo = newModo;
+      toggleAdminControls(userRole, modo);
+      toggleAdminFields(userRole, modo);
+      toggleUserInfo(userRole, currentUser);
+    },
+    onAuthSuccess: (usuario) => {
+      currentUser = usuario;
+      userRole = usuario.rol;
+      toggleAdminControls(userRole, modo);
+      toggleAdminFields(userRole, modo);
+      toggleUserInfo(userRole, currentUser);
+    },
+    onAuthFailure: () => {
+      userRole = null;
+      currentUser = null;
+      toggleAdminControls(userRole, modo);
+      toggleAdminFields(userRole, modo);
+      toggleUserInfo(userRole, currentUser);
+    }
+  });
 
-      const usuario = usuarioInput ? usuarioInput.value.trim() : "";
-      const password = passwordInput ? passwordInput.value.trim() : "";
+  // Inicializar administración
+  initBorrarCliente({ btnBorrar, showMessage });
+  initCerrarSesion({ btnLogout, onLogout: resetToLogin });
 
-      showMessage("", "black");
+  // Inicializar membresía y lista de clientes
+  initActivarMembresia({
+    btnActivarMembresia,
+    btnConfirmarActivar,
+    activarPanel,
+    activarUsuario,
+    activarDias,
+    showMessage
+  });
 
-      if (!usuario || !password) {
-        showMessage("Debe llenar todos los campos", "red");
-        return;
-      }
-
-      const data = { usuario, password };
-      const url =
-        modo === "login"
-          ? "http://localhost:3000/api/login"
-          : "http://localhost:3000/api/register";
-
-      try {
-        const response = await fetch(url, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data)
-        });
-
-        // Manejar respuestas no-JSON
-        let result;
-        try {
-          result = await response.json();
-        } catch (e) {
-          // si no es JSON, mostrar status text
-          showMessage(`Error: respuesta inesperada del servidor (${response.status})`, "red");
-          return;
-        }
-
-        if (result && typeof result === "object") {
-          showMessage(result.ok ? result.mensaje : result.error, result.ok ? "green" : "red");
-        } else {
-          showMessage("Respuesta inválida del servidor", "red");
-        }
-      } catch (error) {
-        showMessage("Error al comunicar con el servidor", "red");
-      }
-    });
-  }
-
-  // BORRAR CLIENTE
-  if (btnBorrar) {
-    btnBorrar.addEventListener("click", async () => {
-      const usuarioInput = document.getElementById("usuario");
-      const usuario = usuarioInput ? usuarioInput.value.trim() : "";
-
-      showMessage("", "black");
-
-      if (!usuario) {
-        showMessage("Ingrese el usuario a borrar", "red");
-        return;
-      }
-
-      try {
-        const response = await fetch(
-          `http://localhost:3000/api/borrarcliente/${encodeURIComponent(usuario)}`,
-          { method: "DELETE" }
-        );
-
-        let result;
-        try {
-          result = await response.json();
-        } catch (e) {
-          showMessage(`Error: respuesta inesperada del servidor (${response.status})`, "red");
-          return;
-        }
-
-        showMessage(result.ok ? result.mensaje : result.error, result.ok ? "green" : "red");
-      } catch (error) {
-        showMessage("Error al comunicar con el servidor", "red");
-      }
-    });
-  }
-
-  // LISTA DE CLIENTES
-  if (btnLista) {
-    btnLista.addEventListener("click", async () => {
-      showMessage("Cargando lista...", "black");
-
-      try {
-        const response = await fetch("http://localhost:3000/api/listaclientes");
-        let result;
-        try {
-          result = await response.json();
-        } catch (e) {
-          showMessage(`Error: respuesta inesperada del servidor (${response.status})`, "red");
-          return;
-        }
-
-        if (!result || typeof result !== "object") {
-          showMessage("Respuesta inválida del servidor", "red");
-          return;
-        }
-
-        if (!result.ok && result.error) {
-          showMessage(result.error, "red");
-          return;
-        }
-
-        const clientes = result.data || result.clientes || [];
-        if (!Array.isArray(clientes) || clientes.length === 0) {
-          showMessage("No hay clientes registrados", "black");
-          return;
-        }
-
-        // Mostrar lista con saltos de línea
-        const listado = clientes
-          .map((c, i) => {
-            const nombre = c.usuario ?? c.nombre ?? JSON.stringify(c);
-            return `${i + 1}. ${nombre}`;
-          })
-          .join("\n");
-
-        showMessage(`Clientes:\n${listado}`, "green");
-      } catch (error) {
-        showMessage("Error al obtener la lista", "red");
-      }
-    });
-  }
+  initListaClientes({ btnLista, clientesListado, showMessage });
 });
