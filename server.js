@@ -41,10 +41,10 @@ app.post('/api/register', (req, res) => {
     });
   }
 
-  const hash = bcrypt.hashSync(password, 10); // Encrypta la clave
+  const hash = bcrypt.hashSync(password, 5); // Encrypta la clave
 
   pool.query(   //Se encarga de ingresar datos del usuario al SQL
-    "INSERT INTO datosclientes3 (usuario, password) VALUES (?, ?)",
+    "INSERT INTO usuarios (nombre, password) VALUES (?, ?)",
     [usuario, hash],
     (err, result) => {
       if (err) {
@@ -75,7 +75,7 @@ app.post('/api/login', (req, res) => {
   }
 
   pool.query(
-    "SELECT * FROM datosclientes3 WHERE usuario = ?",
+    "SELECT * FROM usuarios WHERE nombre = ?",
     [usuario],
     (err, results) => {
       if (err) {
@@ -114,7 +114,7 @@ app.post('/api/login', (req, res) => {
 
 // ------------------------ LISTADO CLIENTES ------------------------
 app.get('/api/listaclientes', (req, res) => {
-  pool.query("SELECT * FROM datosclientes3", (err, results) => {
+  pool.query("SELECT * FROM usuarios", (err, results) => {
     if (err) {
       console.error("Error al consultar BD:", err);
       return res.status(500).json({
@@ -142,7 +142,7 @@ app.delete('/api/borrarcliente/:usuario', (req, res) => {
   }
 
   pool.query(
-    "DELETE FROM datosclientes3 WHERE usuario = ?",
+    "DELETE FROM usuarios WHERE nombre = ?",
     [usuario],
     (err, result) => {
       if (err) {
@@ -180,4 +180,3 @@ app.get('/api/health', (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
 });
-
