@@ -17,18 +17,43 @@
     <div id="header-container"></div>
 
     <h1>Bienvenido</h1>
-    <a href="formulario.html">Ir al formulario</a>
-    
+    <a href="formulario.html" class="btn-orange">Ingresar</a>
 
-    <!-- Script para cargar Header.html dinámicamente -->
+    <div id="planes-gallery" class="image-gallery">
+      <div class="gallery-card">
+        <img src="src/assets/Perdida-de-Grasa.png" alt="Perdida de grasa" />
+        <p>Pérdida de grasa</p>
+      </div>
+      <div class="gallery-card">
+        <img src="src/assets/personalizado.png" alt="Personalizado" />
+        <p>Personalizado</p>
+      </div>
+      <div class="gallery-card">
+        <img src="src/assets/full-body.png" alt="Full body" />
+        <p>Full body</p>
+      </div>
+    </div>
+
+    <!-- Script para cargar header.html dinámicamente -->
     <script>
-        fetch("Header.html")
-            .then(res => res.text())
-            .then(html => {
-                document.getElementById("header-container").innerHTML = html;
-            })
-            .catch(err => console.log("Error al cargar Header:", err));
-    </script>
+      function initPlansWidget() {
+        const nav = document.getElementById("nav-planes");
+        const gallery = document.getElementById("planes-gallery");
+        if (!nav || !gallery) return;
 
+        nav.addEventListener("click", (event) => {
+          event.preventDefault();
+          gallery.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      }
+
+      fetch("header.html")
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById("header-container").innerHTML = html;
+          initPlansWidget();
+        })
+        .catch(err => console.log("Error al cargar header:", err));
+    </script>
 </body>
 </html>

@@ -16,7 +16,7 @@ export function toggleAdminFieldsFactory(adminFields) {
   return (userRole, modo) => {
     if (adminFields) {
       adminFields.style.display =
-        userRole === "admin" && modo === "register" ? "block" : "none";
+        modo === "register" ? "block" : "none";
     }
   };
 }

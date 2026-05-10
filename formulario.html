@@ -63,9 +63,9 @@
     </div>
 
     <!-- NUEVOS BOTONES -->
-    <button class="action-btn" id="btnBorrar" style="display: none;">Borrar Cliente</button>
-    <button class="action-btn" id="btnLista" style="display: none;">Lista de Clientes</button>
-    <button class="action-btn" id="btnActivarMembresia" style="display: none;">Activar membresía</button>
+    <button class="action-btn admin-btn admin-btn--red" id="btnBorrar" style="display: none;">Borrar Cliente</button>
+    <button class="action-btn admin-btn admin-btn--orange" id="btnLista" style="display: none;">Lista de Clientes</button>
+    <button class="action-btn admin-btn admin-btn--orange" id="btnActivarMembresia" style="display: none;">Activar membresía</button>
 
     <div id="activar-membresia-panel" style="display:none; margin-top: 12px; text-align:left;">
       <input type="text" id="activar-usuario" placeholder="Nombre del cliente" style="width: 90%; padding: 10px; border-radius: 14px; border: 1px solid #ccc; margin-bottom: 8px;" />
@@ -78,8 +78,69 @@
       <button class="action-btn" id="btnConfirmarActivar" style="width: 94%;">Confirmar</button>
     </div>
 
+    <div id="planes-gallery-panel" class="image-gallery" style="display:none; margin-top: 20px;">
+      <div class="gallery-card">
+        <img src="src/assets/perdida-de-Grasa.png" alt="Perdida de grasa" />
+        <p>Perdida de grasa</p>
+      </div>
+      <div class="gallery-card">
+        <img src="src/assets/personalizado.png" alt="Personalizado" />
+        <p>Personalizado</p>
+      </div>
+      <div class="gallery-card">
+        <img src="src/assets/full-body.png" alt="Full body" />
+        <p>Full body</p>
+      </div>
+    </div>
+
     <p id="mensaje"></p>
     <div id="clientes-listado" style="display:none; margin-top: 14px; text-align:left;"></div>
+
+    <div id="planes-membresia" style="display:none; margin-top: 16px; text-align:left; width: 100%;">
+      <h2 style="margin-bottom: 12px; color: #ff7f00;">Planes de Membresía</h2>
+      <table style="width: 100%; border-collapse: collapse;">
+        <thead style="background: #ff8c00; color: white;">
+          <tr>
+            <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Tipo</th>
+            <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Duración</th>
+            <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Precio</th>
+            <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background: #fff;">
+            <td style="padding: 10px; border: 1px solid #ddd;">Día</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">1 día</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">$10.000</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Activo</td>
+          </tr>
+          <tr style="background: #f9f9f9;">
+            <td style="padding: 10px; border: 1px solid #ddd;">Semana</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">7 días</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">$40.000</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Activo</td>
+          </tr>
+          <tr style="background: #fff;">
+            <td style="padding: 10px; border: 1px solid #ddd;">Mes</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">30 días</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">$100.000</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Activo</td>
+          </tr>
+          <tr style="background: #f9f9f9;">
+            <td style="padding: 10px; border: 1px solid #ddd;">60 días</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">60 días</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">$180.000</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Activo</td>
+          </tr>
+          <tr style="background: #fff;">
+            <td style="padding: 10px; border: 1px solid #ddd;">90 días</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">90 días</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">$250.000</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Activo</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 </div>
 
 <!---se crea una clase footer para controlar estilos desde css-->
@@ -87,10 +148,50 @@
 
 <!-- CARGAR HEADER -->
 <script>
+function initMembershipPanel() {
+  const nav = document.getElementById("nav-membresias");
+  const panel = document.getElementById("planes-membresia");
+  if (!nav || !panel) return;
+
+  const togglePanel = () => {
+    panel.style.display = panel.style.display === "block" ? "none" : "block";
+  };
+
+  nav.addEventListener("click", (event) => {
+    const isFormularioPage = window.location.pathname.endsWith("formulario.html") || window.location.pathname.endsWith("/formulario");
+    if (isFormularioPage) {
+      event.preventDefault();
+      togglePanel();
+    }
+  });
+
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("showMembresias") === "1") {
+    panel.style.display = "block";
+    window.history.replaceState({}, "", window.location.pathname);
+  }
+}
+
+function initPlansPanel() {
+  const navPlanes = document.getElementById("nav-planes");
+  const panel = document.getElementById("planes-gallery-panel");
+  if (!navPlanes || !panel) return;
+
+  navPlanes.addEventListener("click", (event) => {
+    event.preventDefault();
+    panel.style.display = panel.style.display === "block" ? "none" : "block";
+    if (panel.style.display === "block") {
+      panel.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  });
+}
+
 fetch("header.html")
   .then(res => res.text())
   .then(html => {
       document.getElementById("header-container").innerHTML = html;
+      initMembershipPanel();
+      initPlansPanel();
   })
   .catch(err => console.log("Error cargando header:", err));
 </script>
@@ -103,7 +204,7 @@ async function checkBackend() {
     const box = document.getElementById("status");
 
     if (res.ok) {
-      box.textContent = "Servidor conectado ✅";
+      box.textContent = "🏋️Servidor conectado ✅";
       box.style.color = "#28a745";
     } else {
       box.textContent = "Servidor sin conexión";

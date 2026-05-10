@@ -69,7 +69,10 @@ document.addEventListener("DOMContentLoaded", () => {
       btnRegister.classList.add("inactive-btn");
       btnRegister.classList.remove("active-btn");
     }
-    if (btnEnviar) btnEnviar.textContent = "Ingresar";
+    if (btnEnviar) {
+      btnEnviar.textContent = "Ingresar";
+      btnEnviar.style.background = '#ff8c00'; // Reset to orange
+    }
     if (clientesListado) {
       clientesListado.style.display = "none";
       clientesListado.innerHTML = "";
@@ -103,6 +106,12 @@ document.addEventListener("DOMContentLoaded", () => {
     onAuthSuccess: (usuario) => {
       currentUser = usuario;
       userRole = usuario.rol;
+      // Cambiar color del botón Ingresar según el rol
+      if (userRole === 'admin') {
+        btnEnviar.style.background = '#32cd32'; // Verde manzana
+      } else {
+        btnEnviar.style.background = '#ff8c00'; // Naranja
+      }
       toggleAdminControls(userRole, modo);
       toggleAdminFields(userRole, modo);
       toggleUserInfo(userRole, currentUser);

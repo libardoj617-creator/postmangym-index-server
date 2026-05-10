@@ -40,7 +40,7 @@ export function initListaClientes({ btnLista, clientesListado, showMessage }) {
           const dias = Number(c.tiempo_restante) || 0;
           const estado = dias > 0 ? "Activo" : "Inactivo";
           const color = dias > 0 ? "green" : "red";
-          return `<div style="margin-bottom: 6px;"><strong>${i + 1}. ${nombre}</strong> — <span style="color: ${color};">${estado}</span></div>`;
+          return `<div style="margin-bottom: 6px;"><strong>${i + 1}. ${nombre}</strong> — <span style="color: ${color};">${estado} (${dias} días)</span></div>`;
         })
         .join("");
 
@@ -48,7 +48,7 @@ export function initListaClientes({ btnLista, clientesListado, showMessage }) {
         clientesListado.style.display = "block";
         clientesListado.innerHTML = listadoHtml;
       }
-      showMessage(`Clientes cargados`, "green");
+      showMessage(`Clientes Registrados`, "green");
     } catch (error) {
       showMessage("Error al obtener la lista", "red");
     }

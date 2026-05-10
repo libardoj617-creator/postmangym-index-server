@@ -68,17 +68,21 @@ export function initAuthEvents({
 
       if (modo === "register") {
         const userRole = getUserRole();
+        const membresiaSelectReg = document.getElementById("membresia");
+
+        const tiempo_restante = membresiaSelectReg
+          ? parseInt(membresiaSelectReg.value) || 0
+          : 0;
+
         if (userRole === "admin") {
           const rolSelect = document.getElementById("rol");
-          const membresiaSelectReg = document.getElementById("membresia");
-
           const rol = rolSelect ? rolSelect.value : "cliente";
-          const tiempo_restante = membresiaSelectReg
-            ? parseInt(membresiaSelectReg.value) || 0
-            : 0;
           const membresia = tiempo_restante > 0 ? `${tiempo_restante} días` : "Inactiva";
 
           data = { ...data, rol, membresia, tiempo_restante };
+        } else {
+          // For regular registration, just send tiempo_restante
+          data = { ...data, tiempo_restante };
         }
       }
 

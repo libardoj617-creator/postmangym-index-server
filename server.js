@@ -18,6 +18,7 @@ const PORT = process.env.PORT || 3000;
 // -------------------- MIDDLEWARES --------------------
 app.use(cors());
 app.use(express.json());
+app.use(express.static('.'));  // Servir archivos estáticos desde el directorio raíz
 
 // ------------------ CONEXIÓN MySQL -------------------
 const pool = mysql.createPool({
