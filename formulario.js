@@ -32,6 +32,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const statusMembershipLabel = document.getElementById("status-membership-label");
   const adminFields = document.getElementById("admin-fields");
   const membresiaSelect = document.getElementById("membresia");
+  const status = document.getElementById("status");
+  const mainAuthContent = document.getElementById("main-auth-content");
+  const contactForm = document.getElementById("contact-form");
+  const pageTitle = document.getElementById("page-title");
+  const btnContactSend = document.getElementById("btnContactSend");
 
   let modo = "login";
   let userRole = null;
@@ -56,6 +61,26 @@ document.addEventListener("DOMContentLoaded", () => {
     tiempoLabel,
     statusMembershipLabel
   });
+
+  const showContactMode = () => {
+    if (pageTitle) pageTitle.textContent = "Contáctanos";
+    if (mainAuthContent) mainAuthContent.style.display = "none";
+    if (contactForm) contactForm.style.display = "flex";
+    if (userTitle) userTitle.style.display = "none";
+    if (status) status.style.display = "none";
+  };
+
+  const contactParams = new URLSearchParams(window.location.search);
+  if (contactParams.get("contacto") === "1") {
+    showContactMode();
+  }
+
+  if (btnContactSend) {
+    btnContactSend.addEventListener("click", (event) => {
+      event.preventDefault();
+      showMessage("Mensaje enviado. Gracias por contactarnos.", "green");
+    });
+  }
 
   const resetToLogin = () => {
     modo = "login";
@@ -108,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
       userRole = usuario.rol;
       // Cambiar color del botón Ingresar según el rol
       if (userRole === 'admin') {
-        btnEnviar.style.background = '#32cd32'; // Verde manzana
+        btnEnviar.style.background = '#ff8c00'; // Verde manzana
       } else {
         btnEnviar.style.background = '#ff8c00'; // Naranja
       }

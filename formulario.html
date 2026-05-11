@@ -17,13 +17,15 @@
 
 
 
-<h1>Servicio de Autenticación</h1>
+<h1 id="page-title">Servicio de Autenticación</h1>
 <!--Caja blanca-->
 <div class="auth-container">
 <!-- TITULO DE USUARIO -->
 <div id="user-title" class="user-title" style="display: none; color: #333; font-weight: 700; margin-bottom: 10px;"></div>
 <!-- ESTADO DEL SERVIDOR ARRIBA DEL FORMULARIO -->
 <div id="status" class="status-box"></div>
+
+<div id="main-auth-content">
 
 
 
@@ -63,7 +65,7 @@
     </div>
 
     <!-- NUEVOS BOTONES -->
-    <button class="action-btn admin-btn admin-btn--red" id="btnBorrar" style="display: none;">Borrar Cliente</button>
+    <button class="action-btn admin-btn admin-btn--gray" id="btnBorrar" style="display: none;">Borrar Cliente</button>
     <button class="action-btn admin-btn admin-btn--orange" id="btnLista" style="display: none;">Lista de Clientes</button>
     <button class="action-btn admin-btn admin-btn--orange" id="btnActivarMembresia" style="display: none;">Activar membresía</button>
 
@@ -97,7 +99,7 @@
     <div id="clientes-listado" style="display:none; margin-top: 14px; text-align:left;"></div>
 
     <div id="planes-membresia" style="display:none; margin-top: 16px; text-align:left; width: 100%;">
-      <h2 style="margin-bottom: 12px; color: #ff7f00;">Planes de Membresía</h2>
+      <h2 style="margin-bottom: 12px; color: #ff7f00;">Membresías</h2>
       <table style="width: 100%; border-collapse: collapse;">
         <thead style="background: #ff8c00; color: white;">
           <tr>
@@ -141,6 +143,19 @@
         </tbody>
       </table>
     </div>
+
+  </div>
+
+  <div id="contact-form" class="contact-form" style="display: none; text-align: left;">
+    <h2>Contáctanos</h2>
+    <label for="contact-name">Nombre</label>
+    <input type="text" id="contact-name" placeholder="Nombre" />
+    <label for="contact-email">Correo</label>
+    <input type="email" id="contact-email" placeholder="Correo" />
+    <label for="contact-message">Mensaje</label>
+    <textarea id="contact-message" rows="5" placeholder="Mensaje"></textarea>
+    <button class="action-btn" id="btnContactSend">Enviar</button>
+  </div>
 </div>
 
 <!---se crea una clase footer para controlar estilos desde css-->

@@ -47,7 +47,7 @@ h1 {
 /*--botones Iniciar sesion y Registrarse*/
 .button-group button {
   width: 48%;   /*Ancho de los botones*/
-  padding: 2%;
+  padding: 1%;
   
   border: none;
   border-radius: 14px;
@@ -72,12 +72,13 @@ input {         /*Entradas Usuario y Contraseña*/
   margin-top: 2%;
   border-radius: 14px;
   border: 1px solid #ccc;
+  box-sizing: border-box;
 }
-
+/*boton admin ingresar y cerrar sesion*/
 .action-btn {
-  width: 90%;          /* ocupa máximo el 90% del ancho de la pantalla */
+  width: 100%;          /* mismo ancho que botones administrativos */
   max-width: 400px;    /* nunca más grande que 400px */
-  padding: 2%;
+  padding: 8px 6px;
   margin-top: 6px;     /*Margen arriba de los botones*/
   background: #ff8c00;
   color: white;
@@ -85,12 +86,13 @@ input {         /*Entradas Usuario y Contraseña*/
   border-radius: 14px;
   cursor: pointer;
   font-weight: bold;
+  box-sizing: border-box;
 }
 
 .admin-btn {
   width: 100%;
   max-width: 400px;
-  padding: 12px 18px;
+  padding: 8px 16px;
   margin-top: 8px;
   background: #ff8c00;
   color: #ffffff;
@@ -119,8 +121,40 @@ input {         /*Entradas Usuario y Contraseña*/
   background: #32cd32;
 }
 
-.admin-btn--red {
-  background: #ff6b6b;
+.admin-btn--gray {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.contact-form {
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px 0;
+}
+
+.contact-form h2 {
+  margin: 0 0 8px 0;
+  color: #ff8c00;
+}
+
+.contact-form label {
+  font-size: 0.94rem;
+  color: #333;
+  text-align: left;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid #ccc;
+  resize: vertical;
+  box-sizing: border-box;
 }
 
 .image-gallery {

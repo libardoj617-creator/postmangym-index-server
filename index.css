@@ -8,16 +8,17 @@ padding: 40px;
 
 h1 {
 color: #ff8c00;
+margin-bottom: 0;
 }
 
-
+/*boton ingresar del index*/
 .btn-orange {
   display: inline-block;
-  margin-top: 20px;
-  padding: 14px 28px;
+  margin-top: 10px;
+  padding: 8px 28px;
   background: #ff8c00;
   color: #ffffff;
-  border-radius: 10px;
+  border-radius: 16px;
   text-decoration: none;
   font-weight: bold;
   font-size: 18px;
